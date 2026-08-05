@@ -1,0 +1,54 @@
+name: daily-price-log
+
+on:
+  schedule:
+    - cron: "7 23 * * *"   # ~07:07 HKT next day; GitHub cron is best-effort
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-price-log
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # continue-on-error so a failed health check still commits the CSVs
+      # (status rows make the gap visible in the data); the last step then
+      # fails the job so GitHub sends the failure email.
+      - name: Fetch prices
+        id: fetch
+        continue-on-error: true
+        run: python -m tracker.fetch
+
+      - name: Commit data
+        run: |
+          git config user.name "price-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "no data changes"
+          else
+            git commit -m "data: $(date -u +%F) [skip ci]"
+            git pull --rebase
+            git push
+          fi
+
+      - name: Fail job if fetch failed
+        if: steps.fetch.outcome == 'failure'
+        run: |
+          echo "::error::tracker/fetch.py reported a health-check failure or crashed — see 'Fetch prices' step"
+          exit 1
