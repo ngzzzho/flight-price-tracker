@@ -1,5 +1,7 @@
 # flight-price-tracker
 
+**Dashboard: https://ngzzzho.github.io/flight-price-tracker/**
+
 Multi-year study: for fixed HKG→Japan peak-season round trips, how many days
 before departure is the cheapest time to buy? A GitHub Action queries Google
 Flights daily (via [fast-flights](https://github.com/AWeirdDev/flights) query
