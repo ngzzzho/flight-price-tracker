@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HKG→日本 機票價格追蹤</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+<style>
+:root {
+  color-scheme: light;
+  --page:      #f9f9f7;
+  --surface:   #fcfcfb;
+  --ink:       #0b0b0b;
+  --ink-2:     #52514e;
+  --muted:     #898781;
+  --grid:      #e1e0d9;
+  --axis:      #c3c2b7;
+  --border:    rgba(11,11,11,0.10);
+  --s-tyo:     #2a78d6;  /* slot 1 blue */
+  --s-sdj:     #eb6834;  /* slot 2 orange */
+  --s-cts:     #1baf7a;  /* slot 3 aqua */
+  --s-akj:     #eda100;  /* slot 4 yellow */
+  --s-hkd:     #e87ba4;  /* slot 5 magenta */
+  --good:      #0ca30c;
+  --warning:   #fab219;
+  --critical:  #d03b3b;
+  --delta-good:#006300;
+  --delta-bad: #d03b3b;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page:      #0d0d0d;
+    --surface:   #1a1a19;
+    --ink:       #ffffff;
+    --ink-2:     #c3c2b7;
+    --muted:     #898781;
+    --grid:      #2c2c2a;
+    --axis:      #383835;
+    --border:    rgba(255,255,255,0.10);
+    --s-tyo:     #3987e5;
+    --s-sdj:     #d95926;
+    --s-cts:     #199e70;
+    --s-akj:     #c98500;
+    --s-hkd:     #d55181;
+    --delta-good:#0ca30c;
+  }
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  background: var(--page); color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px; line-height: 1.45;
+  padding: 16px 14px 40px; max-width: 1080px; margin: 0 auto;
+}
+h1 { font-size: 20px; font-weight: 650; }
+.sub { color: var(--ink-2); font-size: 13px; margin-top: 2px; }
+.updated { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+  font-size: 13px; color: var(--ink-2); }
+.updated .dot { width: 8px; height: 8px; border-radius: 50%; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px; margin-top: 14px;
+}
+/* filter row */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.chips { display: inline-flex; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 3px; gap: 2px; }
+.chips button {
+  border: 0; background: transparent; color: var(--ink-2); font: inherit;
+  font-size: 13px; padding: 6px 11px; border-radius: 8px; cursor: pointer;
+}
+.chips button[aria-pressed="true"] { background: var(--ink); color: var(--page); font-weight: 600; }
+/* stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px; margin-top: 14px; }
+.tile { background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 12px 10px; position: relative; }
+.tile .key { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); }
+.tile .key .swatch { width: 10px; height: 10px; border-radius: 3px; }
+.tile .val { font-size: 24px; font-weight: 650; margin-top: 4px; }
+.tile .val.na { color: var(--muted); font-size: 16px; font-weight: 500; margin-top: 9px; }
+.tile .meta { font-size: 12px; color: var(--muted); margin-top: 2px; min-height: 17px; }
+.tile .delta { font-size: 12px; font-weight: 600; }
+.tile .delta.down { color: var(--delta-good); }
+.tile .delta.up { color: var(--delta-bad); }
+.tile .low { position: absolute; top: 10px; right: 10px; font-size: 11px; font-weight: 650;
+  color: var(--delta-good); }
+.tile svg.spark { display: block; margin-top: 6px; width: 100%; height: 26px; }
+/* chart */
+.chart-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+.chart-head h2 { font-size: 15px; font-weight: 650; }
+.chart-head .hint { font-size: 12px; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; font-size: 12.5px; color: var(--ink-2); }
+.legend .item { display: inline-flex; align-items: center; gap: 6px; }
+.legend .item.off { color: var(--muted); }
+.legend .line { width: 16px; height: 2px; border-radius: 1px; }
+#plot-wrap { position: relative; margin-top: 6px; }
+#plot { display: block; width: 100%; touch-action: pan-y; }
+#tooltip {
+  position: absolute; pointer-events: none; display: none; z-index: 5;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 8px 10px; font-size: 12.5px; box-shadow: 0 4px 14px rgba(0,0,0,.14);
+  min-width: 150px;
+}
+#tooltip .t-date { color: var(--muted); margin-bottom: 4px; }
+#tooltip .t-row { display: flex; align-items: center; gap: 7px; margin-top: 2px; }
+#tooltip .t-row .line { width: 14px; height: 2px; border-radius: 1px; flex: none; }
+#tooltip .t-row .v { font-weight: 650; font-variant-numeric: tabular-nums; margin-left: auto; }
+#tooltip .t-row .n { color: var(--ink-2); }
+/* table */
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 8px; }
+th { text-align: left; color: var(--muted); font-weight: 500; font-size: 12px;
+  border-bottom: 1px solid var(--grid); padding: 6px 8px 6px 0; }
+td { padding: 7px 8px 7px 0; border-bottom: 1px solid var(--grid);
+  font-variant-numeric: tabular-nums; }
+tr:last-child td { border-bottom: 0; }
+td .st { display: inline-flex; align-items: center; gap: 5px; }
+td .st .ic { font-size: 12px; }
+.price-strong { font-weight: 650; }
+.flight { color: var(--muted); font-size: 12px; }
+/* footer */
+footer { margin-top: 18px; font-size: 12.5px; color: var(--muted); }
+footer a { color: var(--ink-2); }
+.err { background: var(--surface); border: 1px solid var(--critical); color: var(--ink);
+  border-radius: 12px; padding: 14px; margin-top: 16px; display: none; }
+@media (max-width: 560px) {
+  .tiles { grid-template-columns: repeat(2, 1fr); }
+  body { padding: 12px 10px 32px; }
+}
+</style>
+</head>
+<body>
+<h1>HKG→日本 機票價格追蹤 ✈️</h1>
+<div class="sub">聖誕＋農曆新年高峰期，每日自動記錄 Google Flights 白名單航空公司來回票價（HKD，1 位成人）</div>
+<div class="updated" id="updated"></div>
+
+<div class="filters" id="filters">
+  <div class="chips" id="trip-chips" role="group" aria-label="行程"></div>
+  <div class="chips" id="mode-chips" role="group" aria-label="價格範圍">
+    <button data-mode="any" aria-pressed="true">所有航班</button>
+    <button data-mode="nonstop" aria-pressed="false">淨直航</button>
+  </div>
+</div>
+
+<div class="err" id="err"></div>
+
+<div class="tiles" id="tiles"></div>
+
+<div class="card">
+  <div class="chart-head">
+    <h2>幾多日前買最平？</h2>
+    <span class="hint">X 軸＝距出發日數（越右越近出發）・Y 軸＝當日最平來回價</span>
+  </div>
+  <div class="legend" id="legend"></div>
+  <div id="plot-wrap">
+    <svg id="plot" role="img" aria-label="價格對距出發日數折線圖"></svg>
+    <div id="tooltip"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="chart-head"><h2>最新一日明細</h2><span class="hint" id="table-date"></span></div>
+  <table id="detail">
+    <thead><tr>
+      <th>目的地</th><th>狀態</th><th>最平</th><th>直航最平</th><th>合規航班數</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<footer>
+  資料每朝約 07:07 HKT 更新 ·
+  <a href="https://github.com/ngzzzho/flight-price-tracker">GitHub repo</a> ·
+  <a href="https://raw.githubusercontent.com/ngzzzho/flight-price-tracker/main/data/dailysummary.csv">summary CSV</a> ·
+  <a href="https://raw.githubusercontent.com/ngzzzho/flight-price-tracker/main/data/pricelog.csv">明細 CSV</a><br>
+  註：價格＝該去程＋最平白名單回程嘅來回總價；LCC 唔包行李；旭川／函館遠期通常無白名單航班屬正常。
+</footer>
+
+<script>
+"use strict";
+const RAW = "https://raw.githubusercontent.com/ngzzzho/flight-price-tracker/main/data/dailysummary.csv";
+const DESTS = [
+  { code: "TYO", name: "東京",  cssVar: "--s-tyo" },
+  { code: "SDJ", name: "仙台",  cssVar: "--s-sdj" },
+  { code: "CTS", name: "札幌",  cssVar: "--s-cts" },
+  { code: "AKJ", name: "旭川",  cssVar: "--s-akj" },
+  { code: "HKD", name: "函館",  cssVar: "--s-hkd" },
+];
+const TRIP_LABELS = { "XMAS-2026": "聖誕 2026", "CNY-2027-before": "CNY 年廿三出發", "CNY-2027-after": "CNY 年初一出發" };
+const STATUS = {
+  OK:        { ic: "●", label: "正常",   cls: "good" },
+  SUSPECT:   { ic: "⚠", label: "可疑",   cls: "warning" },
+  ERROR:     { ic: "✕", label: "抓取失敗", cls: "critical" },
+  NO_RESULT: { ic: "◌", label: "無航班",  cls: "muted" },
+};
+let rows = [], trips = [], state = { trip: null, mode: "any" };
+
+function cssColor(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+function parseCSV(text) {
+  const out = []; let row = [], field = "", inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQ) {
+      if (c === '"') { if (text[i+1] === '"') { field += '"'; i++; } else inQ = false; }
+      else field += c;
+    } else if (c === '"') inQ = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (field !== "" || row.length) { row.push(field); out.push(row); row = []; field = ""; }
+      if (c === "\r" && text[i+1] === "\n") i++;
+    } else field += c;
+  }
+  if (field !== "" || row.length) { row.push(field); out.push(row); }
+  return out;
+}
+
+function metric(r) {
+  const v = state.mode === "nonstop" ? r.min_price_nonstop : r.min_price_any;
+  return v == null ? null : v;
+}
+function metricFlight(r) {
+  return state.mode === "nonstop" ? r.min_flights_nonstop : r.min_flights_any;
+}
+function fmt(n) { return "HK$" + n.toLocaleString("en-US"); }
+
+/* ---------- rendering ---------- */
+function renderUpdated() {
+  const latest = rows.reduce((m, r) => r.log_date > m ? r.log_date : m, "");
+  const latestRows = rows.filter(r => r.log_date === latest);
+  const bad = latestRows.filter(r => r.status === "ERROR" || r.status === "SUSPECT");
+  const el = document.getElementById("updated");
+  el.textContent = "";
+  const dot = document.createElement("span"); dot.className = "dot";
+  dot.style.background = bad.length ? cssColor("--critical") : cssColor("--good");
+  el.appendChild(dot);
+  el.appendChild(document.createTextNode(
+    `最後更新 ${latest}` + (bad.length ? ` · ${bad.length} 條線異常` : " · 系統正常")));
+  document.getElementById("table-date").textContent = latest;
+  return latest;
+}
+
+function renderChips() {
+  const tc = document.getElementById("trip-chips");
+  tc.textContent = "";
+  for (const t of trips) {
+    const b = document.createElement("button");
+    b.textContent = TRIP_LABELS[t] || t;
+    b.setAttribute("aria-pressed", String(t === state.trip));
+    b.addEventListener("click", () => { state.trip = t; renderAll(); });
+    tc.appendChild(b);
+  }
+  for (const b of document.querySelectorAll("#mode-chips button"))
+    b.setAttribute("aria-pressed", String(b.dataset.mode === state.mode));
+}
+
+function seriesFor(dest) {
+  return rows
+    .filter(r => r.trip_name === state.trip && r.dest === dest && metric(r) != null)
+    .map(r => ({ x: r.days_to_depart, y: metric(r), date: r.log_date, flight: metricFlight(r) }))
+    .sort((a, b) => b.x - a.x);
+}
+
+function renderTiles(latest) {
+  const wrap = document.getElementById("tiles");
+  wrap.textContent = "";
+  for (const d of DESTS) {
+    const hist = seriesFor(d.code);
+    const today = rows.find(r => r.log_date === latest && r.trip_name === state.trip && r.dest === d.code);
+    const tile = document.createElement("div"); tile.className = "tile";
+    const key = document.createElement("div"); key.className = "key";
+    const sw = document.createElement("span"); sw.className = "swatch";
+    sw.style.background = cssColor(d.cssVar);
+    key.appendChild(sw); key.appendChild(document.createTextNode(d.name));
+    tile.appendChild(key);
+
+    const cur = hist.length && today && metric(today) != null ? metric(today) : null;
+    if (cur == null) {
+      const v = document.createElement("div"); v.className = "val na";
+      v.textContent = today && today.status === "ERROR" ? "抓取失敗" : "暫無航班";
+      tile.appendChild(v);
+      const m = document.createElement("div"); m.className = "meta";
+      m.textContent = today ? `仲有 ${today.days_to_depart} 日出發` : "";
+      tile.appendChild(m);
+    } else {
+      const v = document.createElement("div"); v.className = "val"; v.textContent = fmt(cur);
+      tile.appendChild(v);
+      const m = document.createElement("div"); m.className = "meta";
+      const prev = hist.find(p => p.date < latest);
+      if (prev) {
+        const diff = cur - prev.y;
+        const dEl = document.createElement("span");
+        dEl.className = "delta " + (diff <= 0 ? "down" : "up");
+        dEl.textContent = (diff <= 0 ? "▼" : "▲") + Math.abs(diff).toLocaleString("en-US");
+        m.appendChild(dEl);
+        m.appendChild(document.createTextNode(" 對上一日 · "));
+      }
+      m.appendChild(document.createTextNode(metricFlight(today) || ""));
+      tile.appendChild(m);
+      const minY = Math.min(...hist.map(p => p.y));
+      if (hist.length >= 5 && cur === minY) {
+        const lo = document.createElement("span"); lo.className = "low"; lo.textContent = "▼ 歷史新低";
+        tile.appendChild(lo);
+      }
+      if (hist.length >= 2) tile.appendChild(sparkline(hist.slice(0, 12).reverse(), d));
+    }
+    wrap.appendChild(tile);
+  }
+}
+
+function sparkline(pts, d) {
+  const w = 120, h = 26, pad = 3;
+  const xs = pts.map((_, i) => i), ys = pts.map(p => p.y);
+  const yMin = Math.min(...ys), yMax = Math.max(...ys);
+  const X = i => pad + (w - 2 * pad) * (xs.length === 1 ? 0.5 : i / (xs.length - 1));
+  const Y = v => yMax === yMin ? h / 2 : pad + (h - 2 * pad) * (1 - (v - yMin) / (yMax - yMin));
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "spark"); svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  svg.setAttribute("preserveAspectRatio", "none"); svg.setAttribute("aria-hidden", "true");
+  const path = document.createElementNS(svg.namespaceURI, "path");
+  path.setAttribute("d", pts.map((p, i) => (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(p.y).toFixed(1)).join(" "));
+  path.setAttribute("fill", "none"); path.setAttribute("stroke", cssColor("--muted"));
+  path.setAttribute("stroke-width", "1.5"); path.setAttribute("stroke-linecap", "round");
+  svg.appendChild(path);
+  const dot = document.createElementNS(svg.namespaceURI, "circle");
+  dot.setAttribute("cx", X(pts.length - 1)); dot.setAttribute("cy", Y(pts[pts.length - 1].y));
+  dot.setAttribute("r", "2.5"); dot.setAttribute("fill", cssColor(d.cssVar));
+  svg.appendChild(dot);
+  return svg;
+}
+
+function renderLegend(series) {
+  const lg = document.getElementById("legend");
+  lg.textContent = "";
+  for (const d of DESTS) {
+    const s = series.find(x => x.dest.code === d.code);
+    const item = document.createElement("span");
+    item.className = "item" + (s && s.pts.length ? "" : " off");
+    const line = document.createElement("span"); line.className = "line";
+    line.style.background = s && s.pts.length ? cssColor(d.cssVar) : cssColor("--axis");
+    item.appendChild(line);
+    item.appendChild(document.createTextNode(d.name + (s && s.pts.length ? "" : "（無數據）")));
+    lg.appendChild(item);
+  }
+}
+
+let chartGeom = null;
+function renderChart() {
+  const svg = document.getElementById("plot");
+  svg.textContent = "";
+  const series = DESTS.map(d => ({ dest: d, pts: seriesFor(d.code) }));
+  renderLegend(series);
+  const active = series.filter(s => s.pts.length);
+  const W = svg.clientWidth || svg.parentNode.clientWidth || 700;
+  const H = Math.max(260, Math.min(360, W * 0.5));
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("height", H);
+  const M = { top: 14, right: 16, bottom: 34, left: 52 };
+  chartGeom = null;
+  if (!active.length) {
+    const t = document.createElementNS(svg.namespaceURI, "text");
+    t.setAttribute("x", W / 2); t.setAttribute("y", H / 2); t.setAttribute("text-anchor", "middle");
+    t.setAttribute("fill", cssColor("--muted")); t.setAttribute("font-size", "13");
+    t.textContent = "呢個組合暫時無數據";
+    svg.appendChild(t);
+    return;
+  }
+  const allPts = active.flatMap(s => s.pts);
+  let xMax = Math.max(...allPts.map(p => p.x)), xMin = Math.min(...allPts.map(p => p.x));
+  if (xMax === xMin) { xMax += 3; xMin = Math.max(0, xMin - 3); }
+  let yMin = Math.min(...allPts.map(p => p.y)), yMax = Math.max(...allPts.map(p => p.y));
+  const yPad = Math.max((yMax - yMin) * 0.12, yMax * 0.04);
+  yMin = Math.max(0, yMin - yPad); yMax += yPad;
+  const X = v => M.left + (W - M.left - M.right) * (xMax - v) / (xMax - xMin);   // reversed: big days left
+  const Y = v => M.top + (H - M.top - M.bottom) * (1 - (v - yMin) / (yMax - yMin));
+  const NS = svg.namespaceURI;
+  const mk = (n, at) => { const e = document.createElementNS(NS, n); for (const k in at) e.setAttribute(k, at[k]); return e; };
+
+  // Y grid + ticks (clean steps)
+  const step = niceStep((yMax - yMin) / 4);
+  for (let v = Math.ceil(yMin / step) * step; v <= yMax; v += step) {
+    svg.appendChild(mk("line", { x1: M.left, x2: W - M.right, y1: Y(v), y2: Y(v),
+      stroke: cssColor("--grid"), "stroke-width": 1 }));
+    const t = mk("text", { x: M.left - 8, y: Y(v) + 4, "text-anchor": "end",
+      fill: cssColor("--muted"), "font-size": 11, style: "font-variant-numeric:tabular-nums" });
+    t.textContent = v >= 1000 ? (v / 1000) + "k" : v;
+    svg.appendChild(t);
+  }
+  // X axis baseline + ticks
+  svg.appendChild(mk("line", { x1: M.left, x2: W - M.right, y1: H - M.bottom, y2: H - M.bottom,
+    stroke: cssColor("--axis"), "stroke-width": 1 }));
+  const xStep = niceStep((xMax - xMin) / 6) || 1;
+  for (let v = Math.ceil(xMin / xStep) * xStep; v <= xMax; v += xStep) {
+    const t = mk("text", { x: X(v), y: H - M.bottom + 16, "text-anchor": "middle",
+      fill: cssColor("--muted"), "font-size": 11, style: "font-variant-numeric:tabular-nums" });
+    t.textContent = v;
+    svg.appendChild(t);
+  }
+  const xl = mk("text", { x: W - M.right, y: H - 6, "text-anchor": "end", fill: cssColor("--muted"), "font-size": 11 });
+  xl.textContent = "距出發日數 →";
+  svg.appendChild(xl);
+
+  // lines + markers (2px line, ≥8px marker with 2px surface ring)
+  for (const s of active) {
+    const col = cssColor(s.dest.cssVar);
+    if (s.pts.length > 1) {
+      svg.appendChild(mk("path", {
+        d: s.pts.map((p, i) => (i ? "L" : "M") + X(p.x).toFixed(1) + " " + Y(p.y).toFixed(1)).join(" "),
+        fill: "none", stroke: col, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    }
+    for (const p of s.pts) {
+      svg.appendChild(mk("circle", { cx: X(p.x), cy: Y(p.y), r: 4, fill: col,
+        stroke: cssColor("--surface"), "stroke-width": 2 }));
+    }
+  }
+  // selective direct label: the global minimum (the extreme)
+  const minPt = allPts.reduce((m, p) => p.y < m.y ? p : m, allPts[0]);
+  const lab = mk("text", { x: X(minPt.x), y: Y(minPt.y) + 18, "text-anchor": "middle",
+    fill: cssColor("--ink-2"), "font-size": 11, "font-weight": 600 });
+  lab.textContent = "最低 " + fmt(minPt.y);
+  svg.appendChild(lab);
+
+  // crosshair layer
+  const cross = mk("line", { y1: M.top, y2: H - M.bottom, stroke: cssColor("--axis"),
+    "stroke-width": 1, visibility: "hidden" });
+  svg.appendChild(cross);
+  chartGeom = { X, Y, M, W, H, active, cross };
+}
+
+function niceStep(raw) {
+  if (!isFinite(raw) || raw <= 0) return 1;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  for (const m of [1, 2, 2.5, 5, 10]) if (raw <= m * p) return m * p;
+  return 10 * p;
+}
+
+/* crosshair + tooltip: snap to nearest X across all series */
+function onPointer(ev) {
+  if (!chartGeom) return;
+  const svg = document.getElementById("plot"), tip = document.getElementById("tooltip");
+  const rect = svg.getBoundingClientRect();
+  const px = ev.clientX - rect.left;
+  const xs = [...new Set(chartGeom.active.flatMap(s => s.pts.map(p => p.x)))];
+  if (!xs.length) return;
+  let best = xs[0], bd = Infinity;
+  for (const x of xs) { const d = Math.abs(chartGeom.X(x) - px); if (d < bd) { bd = d; best = x; } }
+  chartGeom.cross.setAttribute("x1", chartGeom.X(best));
+  chartGeom.cross.setAttribute("x2", chartGeom.X(best));
+  chartGeom.cross.setAttribute("visibility", "visible");
+  tip.textContent = "";
+  const at = chartGeom.active
+    .map(s => ({ s, p: s.pts.find(p => p.x === best) }))
+    .filter(x => x.p);
+  const dt = document.createElement("div"); dt.className = "t-date";
+  dt.textContent = `T−${best} 日（${at[0].p.date}）`;
+  tip.appendChild(dt);
+  for (const { s, p } of at.sort((a, b) => a.p.y - b.p.y)) {
+    const r = document.createElement("div"); r.className = "t-row";
+    const ln = document.createElement("span"); ln.className = "line";
+    ln.style.background = cssColor(s.dest.cssVar);
+    const n = document.createElement("span"); n.className = "n"; n.textContent = s.dest.name;
+    const v = document.createElement("span"); v.className = "v"; v.textContent = fmt(p.y);
+    r.appendChild(ln); r.appendChild(n); r.appendChild(v);
+    tip.appendChild(r);
+  }
+  tip.style.display = "block";
+  const wrapRect = document.getElementById("plot-wrap").getBoundingClientRect();
+  let tx = chartGeom.X(best) + 12;
+  if (tx + tip.offsetWidth > wrapRect.width - 4) tx = chartGeom.X(best) - tip.offsetWidth - 12;
+  tip.style.left = Math.max(4, tx) + "px";
+  tip.style.top = (chartGeom.M.top + 6) + "px";
+}
+function offPointer() {
+  document.getElementById("tooltip").style.display = "none";
+  if (chartGeom) chartGeom.cross.setAttribute("visibility", "hidden");
+}
+
+function renderTable(latest) {
+  const tb = document.querySelector("#detail tbody");
+  tb.textContent = "";
+  for (const d of DESTS) {
+    const r = rows.find(x => x.log_date === latest && x.trip_name === state.trip && x.dest === d.code);
+    const tr = document.createElement("tr");
+    const tdName = document.createElement("td");
+    const sw = document.createElement("span"); sw.className = "swatch";
+    sw.style.cssText = `display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;background:${cssColor(d.cssVar)}`;
+    tdName.appendChild(sw); tdName.appendChild(document.createTextNode(d.name));
+    tr.appendChild(tdName);
+    const tdSt = document.createElement("td");
+    if (r) {
+      const st = STATUS[r.status] || { ic: "?", label: r.status, cls: "muted" };
+      const span = document.createElement("span"); span.className = "st";
+      const ic = document.createElement("span"); ic.className = "ic";
+      ic.style.color = st.cls === "muted" ? cssColor("--muted") : cssColor("--" + st.cls);
+      ic.textContent = st.ic;
+      span.appendChild(ic); span.appendChild(document.createTextNode(st.label));
+      tdSt.appendChild(span);
+    } else tdSt.textContent = "—";
+    tr.appendChild(tdSt);
+    const tdAny = document.createElement("td");
+    if (r && r.min_price_any != null) {
+      const p = document.createElement("span"); p.className = "price-strong"; p.textContent = fmt(r.min_price_any);
+      tdAny.appendChild(p);
+      const f = document.createElement("div"); f.className = "flight"; f.textContent = r.min_flights_any;
+      tdAny.appendChild(f);
+    } else tdAny.textContent = "—";
+    tr.appendChild(tdAny);
+    const tdNs = document.createElement("td");
+    if (r && r.min_price_nonstop != null) {
+      tdNs.appendChild(document.createTextNode(fmt(r.min_price_nonstop)));
+      const f = document.createElement("div"); f.className = "flight"; f.textContent = r.min_flights_nonstop;
+      tdNs.appendChild(f);
+    } else tdNs.textContent = "—";
+    tr.appendChild(tdNs);
+    const tdN = document.createElement("td");
+    tdN.textContent = r ? String(r.offers_any) : "—";
+    tr.appendChild(tdN);
+    tb.appendChild(tr);
+  }
+}
+
+function renderAll() {
+  const latest = renderUpdated();
+  renderChips();
+  renderTiles(latest);
+  renderChart();
+  renderTable(latest);
+}
+
+async function boot() {
+  try {
+    const res = await fetch(RAW, { cache: "no-cache" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const cells = parseCSV(await res.text());
+    const head = cells[0];
+    const idx = Object.fromEntries(head.map((h, i) => [h, i]));
+    rows = cells.slice(1).filter(r => r.length >= head.length).map(r => ({
+      log_date: r[idx.log_date],
+      trip_name: r[idx.trip_name],
+      dest: r[idx.dest],
+      days_to_depart: +r[idx.days_to_depart],
+      status: r[idx.status],
+      offers_any: +r[idx.offers_any] || 0,
+      offers_nonstop: +r[idx.offers_nonstop] || 0,
+      min_price_any: r[idx.min_price_any] === "" ? null : +r[idx.min_price_any],
+      min_flights_any: r[idx.min_flights_any],
+      min_price_nonstop: r[idx.min_price_nonstop] === "" ? null : +r[idx.min_price_nonstop],
+      min_flights_nonstop: r[idx.min_flights_nonstop],
+      note: r[idx.note],
+    }));
+    // keep the last row per (date, trip, dest) in case of manual re-runs
+    const dedup = new Map();
+    for (const r of rows) dedup.set(`${r.log_date}|${r.trip_name}|${r.dest}`, r);
+    rows = [...dedup.values()];
+    trips = [...new Set(rows.map(r => r.trip_name))];
+    state.trip = trips[0] || null;
+    for (const b of document.querySelectorAll("#mode-chips button"))
+      b.addEventListener("click", () => { state.mode = b.dataset.mode; renderAll(); });
+    const plot = document.getElementById("plot");
+    plot.addEventListener("pointermove", onPointer);
+    plot.addEventListener("pointerdown", onPointer);
+    plot.addEventListener("pointerleave", offPointer);
+    window.addEventListener("resize", () => { renderChart(); });
+    if (window.matchMedia) {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderAll);
+    }
+    renderAll();
+  } catch (e) {
+    const el = document.getElementById("err");
+    el.style.display = "block";
+    el.textContent = "讀取數據失敗（" + e.message + "）— 請重新整理，或直接開 GitHub 上嘅 CSV。";
+  }
+}
+boot();
+</script>
+</body>
+</html>
