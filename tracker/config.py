@@ -25,7 +25,7 @@ AIRLINE_WHITELIST = [
 # "TYO" city code covers NRT + HND in a single query (verified working).
 DESTINATIONS = [
     ("TYO", "TYO", "Tokyo",     True,  3),
-    ("SDJ", "SDJ", "Sendai",    True,  99),  # TEMP: alert drill, revert me
+    ("SDJ", "SDJ", "Sendai",    True,  1),
     ("CTS", "CTS", "Sapporo",   False, 1),
     ("AKJ", "AKJ", "Asahikawa", False, 0),
     ("HKD", "HKD", "Hakodate",  False, 0),
