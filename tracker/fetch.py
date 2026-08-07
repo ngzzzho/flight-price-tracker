@@ -154,6 +154,24 @@ def append_csv(path, header, rows):
         w.writerows(rows)
 
 
+def already_recorded(log_date, active):
+    """True if every (trip x dest) summary row for this HKT date already exists
+    with a clean status — lets backup cron slots exit without re-querying.
+    ERROR/SUSPECT days return False so a later slot retries the whole day."""
+    path = os.path.join(config.DATA_DIR, config.DAILYSUMMARY)
+    if not os.path.exists(path):
+        return False
+    need = {(t[0], d[0]) for t in active for d in config.DESTINATIONS}
+    got, bad = set(), False
+    with open(path, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            if row["log_date"] == log_date.isoformat():
+                got.add((row["trip_name"], row["dest"]))
+                if row["status"] in ("ERROR", "SUSPECT"):
+                    bad = True
+    return need <= got and not bad
+
+
 PRICELOG_HEADER = [
     "log_date", "trip_name", "dest", "days_to_depart", "price_hkd", "airlines",
     "flight_numbers", "out_stops", "dest_airport", "out_dep", "out_arr",
@@ -182,6 +200,10 @@ def main():
         print(f"skipping past trips: {', '.join(skipped_trips)}")
     if not active:
         print("no active trips — nothing to do (add next season's dates in tracker/config.py)")
+        return 0
+
+    if already_recorded(log_date, active):
+        print(f"{log_date} already fully recorded — backup slot, nothing to do")
         return 0
 
     price_rows, summary_rows = [], []

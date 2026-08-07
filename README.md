@@ -62,6 +62,14 @@ marks the workflow failed so GitHub emails the repo owner. Check
 github.com → Settings → Notifications → System → Actions: email for
 failed workflows enabled (default on).
 
+**Guaranteed daily capture:** the workflow is scheduled three times a day
+(06:23 / 09:23 / 12:23 HKT). The first slot that records the day does the
+work; later slots see the date fully recorded and exit in under a second.
+A day with ERROR/SUSPECT rows is retried in full by the next slot (later
+rows win in the dashboard; analysis uses per-day minimums). A day can only
+go missing if GitHub skips all three slots — effectively a platform-wide
+outage, which the study accepts as a rare single-day gap.
+
 The CSVs are the second alarm: gaps in `log_date` = missed runs.
 
 > GitHub disables cron workflows after 60 days without repo activity; the
