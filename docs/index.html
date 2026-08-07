@@ -64,7 +64,7 @@ h1 { font-size: 20px; font-weight: 650; }
 }
 /* filter row */
 .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-.chips { display: inline-flex; background: var(--surface); border: 1px solid var(--border);
+.chips { display: inline-flex; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border);
   border-radius: 10px; padding: 3px; gap: 2px; }
 .chips button {
   border: 0; background: transparent; color: var(--ink-2); font: inherit;
@@ -141,6 +141,7 @@ footer a { color: var(--ink-2); }
     <button data-mode="any" aria-pressed="true">所有航班</button>
     <button data-mode="nonstop" aria-pressed="false">淨直航</button>
   </div>
+  <div class="chips" id="airline-chips" role="group" aria-label="航空公司"></div>
 </div>
 
 <div class="err" id="err"></div>
@@ -180,6 +181,12 @@ footer a { color: var(--ink-2); }
 <script>
 "use strict";
 const RAW = "https://raw.githubusercontent.com/ngzzzho/flight-price-tracker/main/data/dailysummary.csv";
+const RAWLOG = "https://raw.githubusercontent.com/ngzzzho/flight-price-tracker/main/data/pricelog.csv";
+const AIRLINES = [
+  ["CX", "國泰"], ["UO", "快運"], ["HB", "大灣區"], ["HX", "港航"],
+  ["NH", "ANA"], ["JL", "JAL"], ["CI", "華航"], ["BR", "長榮"],
+  ["JX", "星宇"], ["KE", "大韓"],
+];
 const DESTS = [
   { code: "TYO", name: "東京",  cssVar: "--s-tyo" },
   { code: "SDJ", name: "仙台",  cssVar: "--s-sdj" },
@@ -194,7 +201,7 @@ const STATUS = {
   ERROR:     { ic: "✕", label: "抓取失敗", cls: "critical" },
   NO_RESULT: { ic: "◌", label: "無航班",  cls: "muted" },
 };
-let rows = [], trips = [], state = { trip: null, mode: "any" };
+let rows = [], offers = null, trips = [], state = { trip: null, mode: "any", airline: "ALL" };
 
 function cssColor(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 
@@ -253,9 +260,48 @@ function renderChips() {
   }
   for (const b of document.querySelectorAll("#mode-chips button"))
     b.setAttribute("aria-pressed", String(b.dataset.mode === state.mode));
+  const ac = document.getElementById("airline-chips");
+  ac.textContent = "";
+  if (!offers) { ac.style.display = "none"; return; }
+  const seen = new Set(offers.flatMap(o => o.al));
+  const opts = [["ALL", "全部"], ...AIRLINES.filter(([c]) => seen.has(c))];
+  for (const [code, label] of opts) {
+    const b = document.createElement("button");
+    b.textContent = code === "ALL" ? label : `${code} ${label}`;
+    b.setAttribute("aria-pressed", String(code === state.airline));
+    b.addEventListener("click", () => { state.airline = code; renderAll(); });
+    ac.appendChild(b);
+  }
+}
+
+/* per-date cheapest offer for (trip, dest) under an airline + mode filter.
+   Points sorted by days_to_depart desc == date ascending. */
+function offerRows(trip, dest, mode, airline) {
+  const byDate = new Map();
+  for (const o of offers) {
+    if (o.trip !== trip || o.dest !== dest) continue;
+    if (mode === "nonstop" && o.qt !== "nonstop") continue;
+    if (airline !== "ALL" && !o.al.includes(airline)) continue;
+    const cur = byDate.get(o.date);
+    if (!cur || o.price < cur.y)
+      byDate.set(o.date, { x: o.days, y: o.price, date: o.date, flight: o.nums });
+  }
+  return [...byDate.values()].sort((a, b) => b.x - a.x);
+}
+
+function countOffers(trip, dest, mode, airline, date) {
+  const seen = new Set();
+  for (const o of offers) {
+    if (o.date !== date || o.trip !== trip || o.dest !== dest) continue;
+    if (mode === "nonstop" && o.qt !== "nonstop") continue;
+    if (airline !== "ALL" && !o.al.includes(airline)) continue;
+    seen.add(o.nums);
+  }
+  return seen.size;
 }
 
 function seriesFor(dest) {
+  if (offers) return offerRows(state.trip, dest, state.mode, state.airline);
   return rows
     .filter(r => r.trip_name === state.trip && r.dest === dest && metric(r) != null)
     .map(r => ({ x: r.days_to_depart, y: metric(r), date: r.log_date, flight: metricFlight(r) }))
@@ -275,8 +321,8 @@ function renderTiles(latest) {
     key.appendChild(sw); key.appendChild(document.createTextNode(d.name));
     tile.appendChild(key);
 
-    const cur = hist.length && today && metric(today) != null ? metric(today) : null;
-    if (cur == null) {
+    const curPt = hist.find(p => p.date === latest) || null;
+    if (!curPt) {
       const v = document.createElement("div"); v.className = "val na";
       v.textContent = today && today.status === "ERROR" ? "抓取失敗" : "暫無航班";
       tile.appendChild(v);
@@ -284,26 +330,32 @@ function renderTiles(latest) {
       m.textContent = today ? `仲有 ${today.days_to_depart} 日出發` : "";
       tile.appendChild(m);
     } else {
+      const cur = curPt.y;
       const v = document.createElement("div"); v.className = "val"; v.textContent = fmt(cur);
       tile.appendChild(v);
       const m = document.createElement("div"); m.className = "meta";
-      const prev = hist.find(p => p.date < latest);
+      const before = hist.filter(p => p.date < latest);   // date-ascending
+      const prev = before.length ? before[before.length - 1] : null;
       if (prev) {
         const diff = cur - prev.y;
         const dEl = document.createElement("span");
-        dEl.className = "delta " + (diff <= 0 ? "down" : "up");
-        dEl.textContent = (diff <= 0 ? "▼" : "▲") + Math.abs(diff).toLocaleString("en-US");
+        if (diff === 0) {
+          dEl.className = "delta"; dEl.textContent = "持平";
+        } else {
+          dEl.className = "delta " + (diff < 0 ? "down" : "up");
+          dEl.textContent = (diff < 0 ? "▼" : "▲") + Math.abs(diff).toLocaleString("en-US");
+        }
         m.appendChild(dEl);
         m.appendChild(document.createTextNode(" 對上一日 · "));
       }
-      m.appendChild(document.createTextNode(metricFlight(today) || ""));
+      m.appendChild(document.createTextNode(curPt.flight || ""));
       tile.appendChild(m);
       const minY = Math.min(...hist.map(p => p.y));
       if (hist.length >= 5 && cur === minY) {
         const lo = document.createElement("span"); lo.className = "low"; lo.textContent = "▼ 歷史新低";
         tile.appendChild(lo);
       }
-      if (hist.length >= 2) tile.appendChild(sparkline(hist.slice(0, 12).reverse(), d));
+      if (hist.length >= 2) tile.appendChild(sparkline(hist.slice(-12), d));
     }
     wrap.appendChild(tile);
   }
@@ -390,7 +442,7 @@ function renderChart() {
   // X axis baseline + ticks
   svg.appendChild(mk("line", { x1: M.left, x2: W - M.right, y1: H - M.bottom, y2: H - M.bottom,
     stroke: cssColor("--axis"), "stroke-width": 1 }));
-  const xStep = niceStep((xMax - xMin) / 6) || 1;
+  const xStep = Math.max(1, Math.round(niceStep((xMax - xMin) / 6)));  // whole days only
   for (let v = Math.ceil(xMin / xStep) * xStep; v <= xMax; v += xStep) {
     const t = mk("text", { x: X(v), y: H - M.bottom + 16, "text-anchor": "middle",
       fill: cssColor("--muted"), "font-size": 11, style: "font-variant-numeric:tabular-nums" });
@@ -498,23 +550,35 @@ function renderTable(latest) {
       tdSt.appendChild(span);
     } else tdSt.textContent = "—";
     tr.appendChild(tdSt);
+    let anyMin, anyFlight, nsMin, nsFlight, nOffers;
+    if (offers) {
+      const a = offerRows(state.trip, d.code, "any", state.airline).find(p => p.date === latest);
+      const n = offerRows(state.trip, d.code, "nonstop", state.airline).find(p => p.date === latest);
+      anyMin = a ? a.y : null; anyFlight = a ? a.flight : "";
+      nsMin = n ? n.y : null; nsFlight = n ? n.flight : "";
+      nOffers = countOffers(state.trip, d.code, "any", state.airline, latest);
+    } else {
+      anyMin = r ? r.min_price_any : null; anyFlight = r ? r.min_flights_any : "";
+      nsMin = r ? r.min_price_nonstop : null; nsFlight = r ? r.min_flights_nonstop : "";
+      nOffers = r ? r.offers_any : null;
+    }
     const tdAny = document.createElement("td");
-    if (r && r.min_price_any != null) {
-      const p = document.createElement("span"); p.className = "price-strong"; p.textContent = fmt(r.min_price_any);
+    if (anyMin != null) {
+      const p = document.createElement("span"); p.className = "price-strong"; p.textContent = fmt(anyMin);
       tdAny.appendChild(p);
-      const f = document.createElement("div"); f.className = "flight"; f.textContent = r.min_flights_any;
+      const f = document.createElement("div"); f.className = "flight"; f.textContent = anyFlight;
       tdAny.appendChild(f);
     } else tdAny.textContent = "—";
     tr.appendChild(tdAny);
     const tdNs = document.createElement("td");
-    if (r && r.min_price_nonstop != null) {
-      tdNs.appendChild(document.createTextNode(fmt(r.min_price_nonstop)));
-      const f = document.createElement("div"); f.className = "flight"; f.textContent = r.min_flights_nonstop;
+    if (nsMin != null) {
+      tdNs.appendChild(document.createTextNode(fmt(nsMin)));
+      const f = document.createElement("div"); f.className = "flight"; f.textContent = nsFlight;
       tdNs.appendChild(f);
     } else tdNs.textContent = "—";
     tr.appendChild(tdNs);
     const tdN = document.createElement("td");
-    tdN.textContent = r ? String(r.offers_any) : "—";
+    tdN.textContent = nOffers != null ? String(nOffers) : "—";
     tr.appendChild(tdN);
     tb.appendChild(tr);
   }
@@ -528,10 +592,35 @@ function renderAll() {
   renderTable(latest);
 }
 
+function parseOffers(text) {
+  const cells = parseCSV(text);
+  const head = cells[0];
+  const idx = Object.fromEntries(head.map((h, i) => [h, i]));
+  return cells.slice(1).filter(r => r.length >= head.length).map(r => ({
+    date: r[idx.log_date],
+    trip: r[idx.trip_name],
+    dest: r[idx.dest],
+    days: +r[idx.days_to_depart],
+    price: +r[idx.price_hkd],
+    al: r[idx.airlines].split("+"),
+    nums: r[idx.flight_numbers],
+    qt: r[idx.query_type],
+  })).filter(o => o.price > 0);
+}
+
 async function boot() {
   try {
-    const res = await fetch(RAW, { cache: "no-cache" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
+    const [resS, resL] = await Promise.allSettled([
+      fetch(RAW, { cache: "no-cache" }),
+      fetch(RAWLOG, { cache: "no-cache" }),
+    ]);
+    if (resS.status !== "fulfilled" || !resS.value.ok)
+      throw new Error(resS.status === "fulfilled" ? "HTTP " + resS.value.status : resS.reason.message);
+    if (resL.status === "fulfilled" && resL.value.ok) {
+      try { offers = parseOffers(await resL.value.text()); }
+      catch (e) { offers = null; }   // dashboard still works from summary alone
+    }
+    const res = resS.value;
     const cells = parseCSV(await res.text());
     const head = cells[0];
     const idx = Object.fromEntries(head.map((h, i) => [h, i]));
