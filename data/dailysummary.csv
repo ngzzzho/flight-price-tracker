@@ -1964,3 +1964,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-09,CNY-2027-after,CTS,89,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-09 08:07:03
 2026-11-09,CNY-2027-after,AKJ,89,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-09 08:07:03
 2026-11-09,CNY-2027-after,HKD,89,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,XMAS-2026,TYO,41,OK,23,23,4178,UO628,4178,UO628,5,,2026-11-09 12:59:28
+2026-11-09,XMAS-2026,SDJ,41,OK,1,1,6523,UO890,6523,UO890,0,,2026-11-09 12:59:28
+2026-11-09,XMAS-2026,CTS,41,OK,9,5,9474,JL26>JL501,9874,HB880,4,,2026-11-09 12:59:28
+2026-11-09,XMAS-2026,AKJ,41,NO_RESULT,0,0,,,,,0,,2026-11-09 12:59:28
+2026-11-09,XMAS-2026,HKD,41,NO_RESULT,0,0,,,,,0,,2026-11-09 12:59:28
+2026-11-09,CNY-2027-before,TYO,82,OK,23,23,3328,UO628,3328,UO628,4,,2026-11-09 12:59:28
+2026-11-09,CNY-2027-before,SDJ,82,OK,1,1,4233,UO890,4233,UO890,0,,2026-11-09 12:59:28
+2026-11-09,CNY-2027-before,CTS,82,ERROR,0,4,,,6824,HB880,2,ParseShapeError: Google returned an error page,2026-11-09 12:59:28
+2026-11-09,CNY-2027-before,AKJ,82,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-09 12:59:28
+2026-11-09,CNY-2027-before,HKD,82,OK,8,0,5577,NH860>NH553,,,1,2 offers dropped by whitelist,2026-11-09 12:59:28
+2026-11-09,CNY-2027-after,TYO,89,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-09 12:59:28
+2026-11-09,CNY-2027-after,SDJ,89,OK,1,1,11633,UO890,11633,UO890,0,,2026-11-09 12:59:28
+2026-11-09,CNY-2027-after,CTS,89,OK,11,4,9187,NH860>NH987,15354,HB880,4,1 offers dropped by whitelist,2026-11-09 12:59:28
+2026-11-09,CNY-2027-after,AKJ,89,OK,7,0,9184,CX500>JL551,,,0,2 offers dropped by whitelist,2026-11-09 12:59:28
+2026-11-09,CNY-2027-after,HKD,89,OK,9,0,8512,CX500>JL585,,,0,2 offers dropped by whitelist,2026-11-09 12:59:28
