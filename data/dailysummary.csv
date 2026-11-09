@@ -1949,3 +1949,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-09,CNY-2027-after,CTS,89,OK,9,4,8717,NH860>NH51,15354,HB880,4,3 offers dropped by whitelist,2026-11-09 01:46:03
 2026-11-09,CNY-2027-after,AKJ,89,OK,7,0,9184,CX500>JL551,,,0,2 offers dropped by whitelist,2026-11-09 01:46:03
 2026-11-09,CNY-2027-after,HKD,89,OK,8,0,8311,NH860>NH553,,,0,2 offers dropped by whitelist,2026-11-09 01:46:03
+2026-11-09,XMAS-2026,TYO,41,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,XMAS-2026,SDJ,41,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,XMAS-2026,CTS,41,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,XMAS-2026,AKJ,41,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,XMAS-2026,HKD,41,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,CNY-2027-before,TYO,82,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,CNY-2027-before,SDJ,82,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,CNY-2027-before,CTS,82,ERROR,0,4,,,6824,HB880,2,ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,CNY-2027-before,AKJ,82,OK,5,0,7045,JL28>JL551,,,0,4 offers dropped by whitelist,2026-11-09 08:07:03
+2026-11-09,CNY-2027-before,HKD,82,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,CNY-2027-after,TYO,89,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,CNY-2027-after,SDJ,89,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,CNY-2027-after,CTS,89,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,CNY-2027-after,AKJ,89,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-09 08:07:03
+2026-11-09,CNY-2027-after,HKD,89,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-09 08:07:03
