@@ -1979,3 +1979,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-09,CNY-2027-after,CTS,89,OK,11,4,9187,NH860>NH987,15354,HB880,4,1 offers dropped by whitelist,2026-11-09 12:59:28
 2026-11-09,CNY-2027-after,AKJ,89,OK,7,0,9184,CX500>JL551,,,0,2 offers dropped by whitelist,2026-11-09 12:59:28
 2026-11-09,CNY-2027-after,HKD,89,OK,9,0,8512,CX500>JL585,,,0,2 offers dropped by whitelist,2026-11-09 12:59:28
+2026-11-10,XMAS-2026,TYO,40,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-10 04:10:25
+2026-11-10,XMAS-2026,SDJ,40,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-10 04:10:25
+2026-11-10,XMAS-2026,CTS,40,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-10 04:10:25
+2026-11-10,XMAS-2026,AKJ,40,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-10 04:10:25
+2026-11-10,XMAS-2026,HKD,40,NO_RESULT,0,0,,,,,0,,2026-11-10 04:10:25
+2026-11-10,CNY-2027-before,TYO,81,OK,23,23,3328,UO628,3328,UO628,4,,2026-11-10 04:10:25
+2026-11-10,CNY-2027-before,SDJ,81,OK,1,1,4433,UO890,4433,UO890,0,,2026-11-10 04:10:25
+2026-11-10,CNY-2027-before,CTS,81,OK,9,4,6824,HB880,6824,HB880,4,1 offers dropped by whitelist,2026-11-10 04:10:25
+2026-11-10,CNY-2027-before,AKJ,81,OK,4,0,7044,JL28>JL551,,,0,4 offers dropped by whitelist,2026-11-10 04:10:25
+2026-11-10,CNY-2027-before,HKD,81,OK,7,0,5576,NH860>NH559,,,1,2 offers dropped by whitelist,2026-11-10 04:10:25
+2026-11-10,CNY-2027-after,TYO,88,OK,23,23,5928,UO622,5928,UO622,4,,2026-11-10 04:10:25
+2026-11-10,CNY-2027-after,SDJ,88,OK,1,1,11633,UO890,11633,UO890,0,,2026-11-10 04:10:25
+2026-11-10,CNY-2027-after,CTS,88,OK,9,4,11482,JL26>JL501,15354,HB880,4,1 offers dropped by whitelist,2026-11-10 04:10:25
+2026-11-10,CNY-2027-after,AKJ,88,OK,7,0,9183,CX500>JL551,,,0,2 offers dropped by whitelist,2026-11-10 04:10:25
+2026-11-10,CNY-2027-after,HKD,88,OK,12,0,7884,NH860>NH55>NH4853,,,0,2 offers dropped by whitelist,2026-11-10 04:10:25
