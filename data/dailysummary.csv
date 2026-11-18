@@ -2309,3 +2309,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-17,CNY-2027-after,CTS,81,OK,9,4,11112,NH812>NH77,15351,HB880,4,1 offers dropped by whitelist,2026-11-17 13:35:25
 2026-11-17,CNY-2027-after,AKJ,81,OK,7,0,9181,CX500>JL551,,,0,3 offers dropped by whitelist,2026-11-17 13:35:25
 2026-11-17,CNY-2027-after,HKD,81,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-17 13:35:25
+2026-11-18,XMAS-2026,TYO,32,OK,23,23,4178,UO628,4178,UO628,5,,2026-11-18 03:44:08
+2026-11-18,XMAS-2026,SDJ,32,OK,1,1,7273,UO890,7273,UO890,0,,2026-11-18 03:44:08
+2026-11-18,XMAS-2026,CTS,32,OK,8,5,9199,JL26>JL501,9871,HB2886,4,1 offers dropped by whitelist,2026-11-18 03:44:08
+2026-11-18,XMAS-2026,AKJ,32,NO_RESULT,0,0,,,,,0,,2026-11-18 03:44:08
+2026-11-18,XMAS-2026,HKD,32,NO_RESULT,0,0,,,,,0,,2026-11-18 03:44:08
+2026-11-18,CNY-2027-before,TYO,73,OK,22,22,2998,UO628,2998,UO628,4,,2026-11-18 03:44:08
+2026-11-18,CNY-2027-before,SDJ,73,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-18 03:44:08
+2026-11-18,CNY-2027-before,CTS,73,OK,8,4,6482,NH860>NH51,6821,HB880,4,1 offers dropped by whitelist,2026-11-18 03:44:08
+2026-11-18,CNY-2027-before,AKJ,73,OK,4,0,7802,JL26>JL551,,,0,5 offers dropped by whitelist,2026-11-18 03:44:08
+2026-11-18,CNY-2027-before,HKD,73,OK,9,0,5574,NH860>NH557,,,1,2 offers dropped by whitelist,2026-11-18 03:44:08
+2026-11-18,CNY-2027-after,TYO,80,OK,23,23,5947,UO652,5947,UO652,4,,2026-11-18 03:44:08
+2026-11-18,CNY-2027-after,SDJ,80,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-18 03:44:08
+2026-11-18,CNY-2027-after,CTS,80,OK,9,4,11478,JL26>JL501,15351,HB880,4,1 offers dropped by whitelist,2026-11-18 03:44:08
+2026-11-18,CNY-2027-after,AKJ,80,OK,7,0,9181,CX500>JL551,,,0,3 offers dropped by whitelist,2026-11-18 03:44:08
+2026-11-18,CNY-2027-after,HKD,80,OK,9,0,9056,NH860>NH553,,,0,2 offers dropped by whitelist,2026-11-18 03:44:08
