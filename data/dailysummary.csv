@@ -2429,3 +2429,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-21,CNY-2027-after,CTS,77,OK,8,4,11843,KE2012>KE765,15351,HB880,4,1 offers dropped by whitelist,2026-11-21 03:16:34
 2026-11-21,CNY-2027-after,AKJ,77,OK,7,0,8872,JL26>JL551,,,0,2 offers dropped by whitelist,2026-11-21 03:16:34
 2026-11-21,CNY-2027-after,HKD,77,OK,7,0,8509,CX500>JL585,,,0,2 offers dropped by whitelist,2026-11-21 03:16:34
+2026-11-21,XMAS-2026,TYO,29,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-21 08:21:21
+2026-11-21,XMAS-2026,SDJ,29,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-21 08:21:21
+2026-11-21,XMAS-2026,CTS,29,OK,8,5,9471,HB2886,9471,HB2886,4,,2026-11-21 08:21:21
+2026-11-21,XMAS-2026,AKJ,29,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-21 08:21:21
+2026-11-21,XMAS-2026,HKD,29,NO_RESULT,0,0,,,,,0,,2026-11-21 08:21:21
+2026-11-21,CNY-2027-before,TYO,70,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-21 08:21:21
+2026-11-21,CNY-2027-before,SDJ,70,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-21 08:21:21
+2026-11-21,CNY-2027-before,CTS,70,OK,9,4,6032,NH860>NH53,6821,HB880,4,,2026-11-21 08:21:21
+2026-11-21,CNY-2027-before,AKJ,70,OK,5,0,7042,JL26>JL551,,,0,3 offers dropped by whitelist,2026-11-21 08:21:21
+2026-11-21,CNY-2027-before,HKD,70,OK,8,0,5574,NH860>NH555,,,1,2 offers dropped by whitelist,2026-11-21 08:21:21
+2026-11-21,CNY-2027-after,TYO,77,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-21 08:21:21
+2026-11-21,CNY-2027-after,SDJ,77,OK,1,1,8483,UO890,8483,UO890,0,,2026-11-21 08:21:21
+2026-11-21,CNY-2027-after,CTS,77,ERROR,0,4,,,15351,HB880,2,ParseShapeError: Google returned an error page,2026-11-21 08:21:21
+2026-11-21,CNY-2027-after,AKJ,77,OK,6,0,8872,JL26>JL551,,,0,2 offers dropped by whitelist,2026-11-21 08:21:21
+2026-11-21,CNY-2027-after,HKD,77,ERROR,6,0,8509,CX500>JL585,,,0,ParseShapeError: Google returned an error page; 2 offers dropped by whitelist,2026-11-21 08:21:21
