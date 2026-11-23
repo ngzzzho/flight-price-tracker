@@ -2489,3 +2489,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-23,CNY-2027-after,CTS,75,OK,9,4,11443,KE2006>KE761,15351,HB880,4,1 offers dropped by whitelist,2026-11-23 02:54:04
 2026-11-23,CNY-2027-after,AKJ,75,OK,7,0,8872,JL26>JL551,,,0,3 offers dropped by whitelist,2026-11-23 02:54:04
 2026-11-23,CNY-2027-after,HKD,75,OK,10,0,7871,NH860>NH53>NH4853,,,0,2 offers dropped by whitelist,2026-11-23 02:54:04
+2026-11-23,XMAS-2026,TYO,27,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-23 09:13:41
+2026-11-23,XMAS-2026,SDJ,27,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-23 09:13:41
+2026-11-23,XMAS-2026,CTS,27,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-23 09:13:41
+2026-11-23,XMAS-2026,AKJ,27,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-23 09:13:41
+2026-11-23,XMAS-2026,HKD,27,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-23 09:13:41
+2026-11-23,CNY-2027-before,TYO,68,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-23 09:13:41
+2026-11-23,CNY-2027-before,SDJ,68,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-23 09:13:41
+2026-11-23,CNY-2027-before,CTS,68,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: script.ds:1 not found in page,2026-11-23 09:13:41
+2026-11-23,CNY-2027-before,AKJ,68,OK,4,0,7042,JL26>JL551,,,0,5 offers dropped by whitelist,2026-11-23 09:13:41
+2026-11-23,CNY-2027-before,HKD,68,ERROR,8,0,5574,NH860>NH557,,,1,ParseShapeError: Google returned an error page; 2 offers dropped by whitelist,2026-11-23 09:13:41
+2026-11-23,CNY-2027-after,TYO,75,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-23 09:13:41
+2026-11-23,CNY-2027-after,SDJ,75,OK,1,1,8483,UO890,8483,UO890,0,,2026-11-23 09:13:41
+2026-11-23,CNY-2027-after,CTS,75,OK,9,4,12008,JL26>JL501,15351,HB880,4,1 offers dropped by whitelist,2026-11-23 09:13:41
+2026-11-23,CNY-2027-after,AKJ,75,OK,6,0,8872,JL26>JL551,,,0,3 offers dropped by whitelist,2026-11-23 09:13:41
+2026-11-23,CNY-2027-after,HKD,75,OK,9,0,9774,NH860>NH553,,,0,2 offers dropped by whitelist,2026-11-23 09:13:41
