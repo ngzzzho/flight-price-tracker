@@ -2549,3 +2549,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-24,CNY-2027-after,CTS,74,OK,9,4,11446,KE2006>KE761,15354,HB880,4,1 offers dropped by whitelist,2026-11-24 11:07:07
 2026-11-24,CNY-2027-after,AKJ,74,ERROR,7,0,8874,JL26>JL551,,,0,ParseShapeError: Google returned an error page; 3 offers dropped by whitelist,2026-11-24 11:07:07
 2026-11-24,CNY-2027-after,HKD,74,OK,8,0,8556,NH860>NH557,,,0,2 offers dropped by whitelist,2026-11-24 11:07:07
+2026-11-24,XMAS-2026,TYO,26,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-24 14:57:35
+2026-11-24,XMAS-2026,SDJ,26,OK,1,1,6283,UO890,6283,UO890,0,,2026-11-24 14:57:35
+2026-11-24,XMAS-2026,CTS,26,ERROR,0,5,,,9474,HB880,2,ParseShapeError: Google returned an error page,2026-11-24 14:57:35
+2026-11-24,XMAS-2026,AKJ,26,NO_RESULT,0,0,,,,,0,,2026-11-24 14:57:35
+2026-11-24,XMAS-2026,HKD,26,NO_RESULT,0,0,,,,,0,,2026-11-24 14:57:35
+2026-11-24,CNY-2027-before,TYO,67,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-24 14:57:35
+2026-11-24,CNY-2027-before,SDJ,67,OK,2,2,4242,HB360,4242,HB360,0,,2026-11-24 14:57:35
+2026-11-24,CNY-2027-before,CTS,67,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-24 14:57:35
+2026-11-24,CNY-2027-before,AKJ,67,ERROR,5,0,7044,JL736>JL551,,,0,ParseShapeError: Google returned an error page; 4 offers dropped by whitelist,2026-11-24 14:57:35
+2026-11-24,CNY-2027-before,HKD,67,OK,8,0,6026,NH860>NH557,,,1,2 offers dropped by whitelist,2026-11-24 14:57:35
+2026-11-24,CNY-2027-after,TYO,74,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-24 14:57:35
+2026-11-24,CNY-2027-after,SDJ,74,OK,1,1,8483,UO890,8483,UO890,0,,2026-11-24 14:57:35
+2026-11-24,CNY-2027-after,CTS,74,OK,9,4,12012,JL26>JL501,15354,HB880,4,1 offers dropped by whitelist,2026-11-24 14:57:35
+2026-11-24,CNY-2027-after,AKJ,74,OK,7,0,8874,JL26>JL551,,,0,3 offers dropped by whitelist,2026-11-24 14:57:35
+2026-11-24,CNY-2027-after,HKD,74,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-24 14:57:35
