@@ -2609,3 +2609,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-25,CNY-2027-after,CTS,73,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-25 14:32:51
 2026-11-25,CNY-2027-after,AKJ,73,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-25 14:32:51
 2026-11-25,CNY-2027-after,HKD,73,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-25 14:32:51
+2026-11-26,XMAS-2026,TYO,24,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-26 04:11:58
+2026-11-26,XMAS-2026,SDJ,24,OK,1,1,6873,UO890,6873,UO890,0,,2026-11-26 04:11:58
+2026-11-26,XMAS-2026,CTS,24,OK,10,5,8271,HB2886,8271,HB2886,4,,2026-11-26 04:11:58
+2026-11-26,XMAS-2026,AKJ,24,NO_RESULT,0,0,,,,,0,,2026-11-26 04:11:58
+2026-11-26,XMAS-2026,HKD,24,NO_RESULT,0,0,,,,,0,,2026-11-26 04:11:58
+2026-11-26,CNY-2027-before,TYO,65,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-26 04:11:58
+2026-11-26,CNY-2027-before,SDJ,65,OK,2,2,4242,HB360,4242,HB360,0,,2026-11-26 04:11:58
+2026-11-26,CNY-2027-before,CTS,65,OK,7,4,6173,KE2012>KE761,6821,HB880,4,1 offers dropped by whitelist,2026-11-26 04:11:58
+2026-11-26,CNY-2027-before,AKJ,65,OK,5,0,7093,JL26>JL551,,,0,3 offers dropped by whitelist,2026-11-26 04:11:58
+2026-11-26,CNY-2027-before,HKD,65,OK,8,0,6079,NH860>NH557,,,1,2 offers dropped by whitelist,2026-11-26 04:11:58
+2026-11-26,CNY-2027-after,TYO,72,OK,23,23,6347,UO650,6347,UO650,4,,2026-11-26 04:11:58
+2026-11-26,CNY-2027-after,SDJ,72,OK,1,1,9833,UO890,9833,UO890,0,,2026-11-26 04:11:58
+2026-11-26,CNY-2027-after,CTS,72,OK,9,4,12011,JL26>JL501,15351,HB880,4,1 offers dropped by whitelist,2026-11-26 04:11:58
+2026-11-26,CNY-2027-after,AKJ,72,OK,8,0,10152,CX500>JL551,,,0,2 offers dropped by whitelist,2026-11-26 04:11:58
+2026-11-26,CNY-2027-after,HKD,72,OK,8,0,8510,CX520>JL585,,,0,2 offers dropped by whitelist,2026-11-26 04:11:58
