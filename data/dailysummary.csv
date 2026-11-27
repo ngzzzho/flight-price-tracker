@@ -2684,3 +2684,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-27,CNY-2027-after,CTS,71,OK,13,4,10813,NH814>NH401>NH1831,15351,HB880,4,1 offers dropped by whitelist,2026-11-27 09:44:55
 2026-11-27,CNY-2027-after,AKJ,71,ERROR,8,0,10152,CX500>JL551,,,0,ParseShapeError: Google returned an error page; 3 offers dropped by whitelist,2026-11-27 09:44:55
 2026-11-27,CNY-2027-after,HKD,71,ERROR,9,0,9050,NH860>NH553,,,0,ParseShapeError: Google returned an error page; 2 offers dropped by whitelist,2026-11-27 09:44:55
+2026-11-27,XMAS-2026,TYO,23,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,XMAS-2026,SDJ,23,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,XMAS-2026,CTS,23,OK,9,5,7631,HB2886,7631,HB2886,4,,2026-11-27 13:58:04
+2026-11-27,XMAS-2026,AKJ,23,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,XMAS-2026,HKD,23,NO_RESULT,0,0,,,,,0,,2026-11-27 13:58:04
+2026-11-27,CNY-2027-before,TYO,64,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,CNY-2027-before,SDJ,64,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,CNY-2027-before,CTS,64,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,CNY-2027-before,AKJ,64,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,CNY-2027-before,HKD,64,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,CNY-2027-after,TYO,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,CNY-2027-after,SDJ,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,CNY-2027-after,CTS,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,CNY-2027-after,AKJ,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-27,CNY-2027-after,HKD,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
