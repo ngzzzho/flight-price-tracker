@@ -2654,3 +2654,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-26,CNY-2027-after,CTS,72,ERROR,8,0,9743,KE2006>KE761,,,2,ParseShapeError: Google returned an error page; 2 offers dropped by whitelist,2026-11-26 13:59:28
 2026-11-26,CNY-2027-after,AKJ,72,ERROR,8,0,10152,CX500>JL551,,,0,ParseShapeError: Google returned an error page; 2 offers dropped by whitelist,2026-11-26 13:59:28
 2026-11-26,CNY-2027-after,HKD,72,ERROR,0,0,,,,,0,ParseShapeError: script.ds:1 not found in page; ParseShapeError: Google returned an error page,2026-11-26 13:59:28
+2026-11-27,XMAS-2026,TYO,23,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,XMAS-2026,SDJ,23,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,XMAS-2026,CTS,23,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,XMAS-2026,AKJ,23,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,XMAS-2026,HKD,23,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,CNY-2027-before,TYO,64,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,CNY-2027-before,SDJ,64,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,CNY-2027-before,CTS,64,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,CNY-2027-before,AKJ,64,OK,5,0,7043,JL736>JL551,,,0,4 offers dropped by whitelist,2026-11-27 04:19:02
+2026-11-27,CNY-2027-before,HKD,64,ERROR,8,0,5575,NH860>NH557,,,1,ParseShapeError: Google returned an error page; 3 offers dropped by whitelist,2026-11-27 04:19:02
+2026-11-27,CNY-2027-after,TYO,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,CNY-2027-after,SDJ,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 04:19:02
+2026-11-27,CNY-2027-after,CTS,71,ERROR,10,0,9183,NH860>NH987,,,2,ParseShapeError: Google returned an error page; 1 offers dropped by whitelist,2026-11-27 04:19:02
+2026-11-27,CNY-2027-after,AKJ,71,ERROR,8,0,10152,CX500>JL551,,,0,ParseShapeError: Google returned an error page; 3 offers dropped by whitelist,2026-11-27 04:19:02
+2026-11-27,CNY-2027-after,HKD,71,ERROR,9,0,8600,NH860>NH557,,,0,ParseShapeError: Google returned an error page; 3 offers dropped by whitelist,2026-11-27 04:19:02
