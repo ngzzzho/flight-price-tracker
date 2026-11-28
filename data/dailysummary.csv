@@ -2699,3 +2699,18 @@ log_date,trip_name,dest,days_to_depart,status,offers_any,offers_nonstop,min_pric
 2026-11-27,CNY-2027-after,CTS,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-27 13:58:04
 2026-11-27,CNY-2027-after,AKJ,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
 2026-11-27,CNY-2027-after,HKD,71,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-27 13:58:04
+2026-11-28,XMAS-2026,TYO,22,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-28 03:58:53
+2026-11-28,XMAS-2026,SDJ,22,OK,1,1,6523,UO890,6523,UO890,0,,2026-11-28 03:58:53
+2026-11-28,XMAS-2026,CTS,22,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-28 03:58:53
+2026-11-28,XMAS-2026,AKJ,22,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-28 03:58:53
+2026-11-28,XMAS-2026,HKD,22,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page,2026-11-28 03:58:53
+2026-11-28,CNY-2027-before,TYO,63,OK,22,22,3128,UO628,3128,UO628,4,,2026-11-28 03:58:53
+2026-11-28,CNY-2027-before,SDJ,63,OK,1,1,3633,UO890,3633,UO890,0,,2026-11-28 03:58:53
+2026-11-28,CNY-2027-before,CTS,63,OK,10,4,5673,KE2012>KE769,7221,HB880,4,2 offers dropped by whitelist,2026-11-28 03:58:53
+2026-11-28,CNY-2027-before,AKJ,63,ERROR,5,0,7801,JL736>JL551,,,0,ParseShapeError: Google returned an error page; 4 offers dropped by whitelist,2026-11-28 03:58:53
+2026-11-28,CNY-2027-before,HKD,63,ERROR,0,0,,,,,0,ParseShapeError: Google returned an error page; ParseShapeError: Google returned an error page,2026-11-28 03:58:53
+2026-11-28,CNY-2027-after,TYO,70,OK,23,23,6778,UO622,6778,UO622,4,,2026-11-28 03:58:53
+2026-11-28,CNY-2027-after,SDJ,70,OK,2,2,7273,UO890,7273,UO890,0,,2026-11-28 03:58:53
+2026-11-28,CNY-2027-after,CTS,70,OK,10,4,11513,NH814>NH65,15351,HB880,4,1 offers dropped by whitelist,2026-11-28 03:58:53
+2026-11-28,CNY-2027-after,AKJ,70,OK,7,0,10553,CX500>JL551,,,0,3 offers dropped by whitelist,2026-11-28 03:58:53
+2026-11-28,CNY-2027-after,HKD,70,ERROR,8,0,8510,CX520>JL585,,,0,ParseShapeError: Google returned an error page; 3 offers dropped by whitelist,2026-11-28 03:58:53
